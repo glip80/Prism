@@ -1,0 +1,25 @@
+{
+  "folders": [
+    { "path": "." },
+    { "path": "frontend" },
+    { "path": "backend/auth" },
+    { "path": "backend/layout" },
+    { "path": "backend/widget" },
+    { "path": "backend/connector" },
+    { "path": "e2e" }
+  ],
+  "settings": {
+    "typescript.tsdk": "frontend/node_modules/typescript/lib"
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug All Services",
+        "type": "node",
+        "request": "attach",
+        "port": 9229
+      }
+    ]
+  }
+}

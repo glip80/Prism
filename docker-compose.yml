@@ -1,0 +1,95 @@
+
+services:
+  # --- Databases ---
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: app_password
+      POSTGRES_DB: modular_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  mongodb:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  # --- Backend Services ---
+  auth-service:
+    build: ./backend/auth
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      DATABASE_URL: postgresql://app_user:app_password@postgres:5432/modular_db
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: dev_jwt_secret_change_me
+      NODE_ENV: development
+    depends_on:
+      - postgres
+      - redis
+
+  layout-service:
+    build: ./backend/layout
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+      MONGO_URI: mongodb://mongodb:27017/layout_service
+      POSTGRES_URL: postgresql://app_user:app_password@postgres:5432/modular_db
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: dev_jwt_secret_change_me
+      NODE_ENV: development
+    depends_on:
+      - mongodb
+      - postgres
+      - redis
+
+  widget-service:
+    build: ./backend/widget
+    ports:
+      - "3003:3003"
+    environment:
+      PORT: 3003
+      REDIS_URL: redis://redis:6379
+      CONNECTOR_API_URL: http://connector-service:8000
+      JWT_SECRET: dev_jwt_secret_change_me
+      NODE_ENV: development
+    depends_on:
+      - redis
+      - connector-service
+
+  connector-service:
+    build: ./backend/connector
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://app_user:app_password@postgres:5432/modular_db
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+
+  # --- Frontend ---
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - auth-service
+      - layout-service
+      - widget-service
+
+volumes:
+  pgdata:
+  mongodata:

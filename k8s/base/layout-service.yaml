@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: layout-service
+  namespace: dashboard-prod
+  labels:
+    app: layout-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: layout-service
+  template:
+    metadata:
+      labels:
+        app: layout-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3002"
+    spec:
+      serviceAccountName: dashboard-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+      containers:
+        - name: layout-service
+          image: ghcr.io/your-org/dashboard-platform/layout:latest
+          ports:
+            - containerPort: 3002
+          envFrom:
+            - configMapRef:
+                name: dashboard-config
+            - secretRef:
+                name: dashboard-secrets
+          env:
+            - name: SERVICE_NAME
+              value: "layout-service"
+            - name: PORT
+              value: "3002"
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "300m"
+            limits:
+              memory: "1Gi"
+              cpu: "600m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 3002
+            initialDelaySeconds: 5
+            periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: layout-service
+  namespace: dashboard-prod
+spec:
+  selector:
+    app: layout-service
+  ports:
+    - port: 3002
+      targetPort: 3002
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: layout-service-hpa
+  namespace: dashboard-prod
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: layout-service
+  minReplicas: 3
+  maxReplicas: 15
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          averageUtilization: 70
+          type: Utilization

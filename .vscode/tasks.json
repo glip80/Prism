@@ -1,0 +1,61 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Docker Compose Up",
+      "type": "shell",
+      "command": "docker-compose",
+      "args": ["up", "-d", "--build"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker Compose Down",
+      "type": "shell",
+      "command": "docker-compose",
+      "args": ["down", "-v"],
+      "group": "build"
+    },
+    {
+      "label": "Run All Tests",
+      "type": "shell",
+      "command": "make",
+      "args": ["test-all"],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Run Frontend Tests",
+      "type": "shell",
+      "command": "make",
+      "args": ["test-frontend"],
+      "group": "test"
+    },
+    {
+      "label": "Run E2E Tests",
+      "type": "shell",
+      "command": "make",
+      "args": ["test-e2e"],
+      "group": "test"
+    },
+    {
+      "label": "Install Dependencies",
+      "type": "shell",
+      "command": "make",
+      "args": ["install"],
+      "group": "build"
+    },
+    {
+      "label": "Lint All",
+      "type": "shell",
+      "command": "make",
+      "args": ["lint"],
+      "group": "build"
+    }
+  ]
+}

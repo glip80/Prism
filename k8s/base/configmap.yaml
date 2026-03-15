@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dashboard-config
+  namespace: dashboard-prod
+data:
+  NODE_ENV: "production"
+  LOG_LEVEL: "info"
+  JWT_EXPIRES_IN: "24h"
+  REDIS_POOL_SIZE: "20"
+  POSTGRES_POOL_SIZE: "20"
+  WIDGET_REFRESH_MAX_INTERVAL: "3600000"
+  MAX_WIDGETS_PER_LAYOUT: "50"
+  ENABLE_REALTIME: "true"
+  METRICS_ENABLED: "true"
