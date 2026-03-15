@@ -20,7 +20,7 @@ export const LayoutSchema = z.object({
   // Widgets array
   widgets: z.array(z.object({
     id: z.string(),
-    type: z.enum(['chart', 'table', 'metric', 'text', 'iframe', 'custom']),
+    type: z.enum(['chart', 'table', 'metric', 'text', 'iframe', 'custom', 'tradingview-chart', 'tradingview-screener', 'tradingview-heatmap']),
     title: z.string(),
     x: z.number().int().min(0),
     y: z.number().int().min(0),

@@ -3,6 +3,9 @@ import { Settings, GripHorizontal } from 'lucide-react';
 import ChartWidget from '../Widgets/ChartWidget/ChartWidget';
 import TableWidget from '../Widgets/TableWidget/TableWidget';
 import MetricWidget from '../Widgets/MetricWidget/MetricWidget';
+import TradingViewChartWidget from '../Widgets/TradingViewWidget/TradingViewChartWidget';
+import TradingViewScreenerWidget from '../Widgets/TradingViewWidget/TradingViewScreenerWidget';
+import TradingViewHeatmapWidget from '../Widgets/TradingViewWidget/TradingViewHeatmapWidget';
 
 interface Props {
   widget: any; // Ideally typed as Widget
@@ -17,6 +20,12 @@ const WidgetRenderer: React.FC<Props> = ({ widget }) => {
         return <TableWidget widgetId={widget.id} config={widget.config} />;
       case 'metric':
         return <MetricWidget widgetId={widget.id} config={widget.config} />;
+      case 'tradingview-chart':
+        return <TradingViewChartWidget widgetId={widget.id} config={widget.config} />;
+      case 'tradingview-screener':
+        return <TradingViewScreenerWidget widgetId={widget.id} config={widget.config} />;
+      case 'tradingview-heatmap':
+        return <TradingViewHeatmapWidget widgetId={widget.id} config={widget.config} />;
       default:
         return <div className="p-4 text-text-muted">Unsupported widget type: {widget.type}</div>;
     }
@@ -43,3 +52,4 @@ const WidgetRenderer: React.FC<Props> = ({ widget }) => {
 };
 
 export default WidgetRenderer;
+

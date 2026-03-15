@@ -8,6 +8,7 @@ interface LayoutState {
   error: string | null;
   setCurrentLayout: (layout: Layout) => void;
   setLayouts: (layouts: Layout[]) => void;
+  addLayout: (layout: Layout) => void;
   updateWidgetLayout: (layoutItems: any[]) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
@@ -21,6 +22,7 @@ export const useLayoutStore = create<LayoutState>((set, get) => ({
 
   setCurrentLayout: (layout) => set({ currentLayout: layout }),
   setLayouts: (layouts) => set({ layouts }),
+  addLayout: (layout) => set((state) => ({ layouts: [...state.layouts, layout] })),
   
   updateWidgetLayout: (layoutItems) => {
     const { currentLayout } = get();
