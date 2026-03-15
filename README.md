@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/logo.png" alt="Project Prism Logo" width="600" />
+  <img src="docs/assets/logo.prism.png" alt="Project Prism Logo" width="600" />
 </p>
 
 # Modular Dashboard Platform (MDP)
@@ -9,6 +9,7 @@ Enterprise-grade, containerized dashboard system with real-time capabilities, mu
 ## Quick Start
 
 ### Prerequisites
+
 - Docker 24.0+
 - Node.js 20+
 - Python 3.11+ (for connector service)
