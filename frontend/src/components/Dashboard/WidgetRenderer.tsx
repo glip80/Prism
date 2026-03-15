@@ -33,18 +33,18 @@ const WidgetRenderer: React.FC<Props> = ({ widget }) => {
 
   return (
     <>
-      <div className="flex items-center justify-between px-3 py-2 border-b border-border bg-background">
-        <h3 className="font-semibold text-sm truncate text-text">{widget.title}</h3>
-        <div className="flex items-center gap-1">
-          <button className="p-1 hover:bg-border rounded text-text-muted transition-colors">
+      <div className="widget-header">
+        <h3 className="widget-title">{widget.title}</h3>
+        <div className="widget-actions">
+          <button className="widget-action-btn" title="Settings">
             <Settings size={14} />
           </button>
-          <div className="widget-drag-handle cursor-move p-1 hover:bg-border rounded text-text-muted transition-colors">
+          <div className="widget-drag-handle widget-action-btn" title="Drag">
             <GripHorizontal size={14} />
           </div>
         </div>
       </div>
-      <div className="flex-1 overflow-auto relative">
+      <div className="widget-body">
         {renderContent()}
       </div>
     </>

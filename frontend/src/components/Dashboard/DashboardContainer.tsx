@@ -2,9 +2,7 @@ import React, { useEffect } from 'react';
 import { useLayoutStore } from '../../stores/layoutStore';
 import { useLayout } from '../../hooks/useLayout';
 import GridLayout from './GridLayout';
-import ThemeSwitcher from './Toolbar/ThemeSwitcher';
-import LayoutSelector from './Toolbar/LayoutSelector';
-import AddWidgetButton from './Toolbar/AddWidgetButton';
+import { Home, ChevronRight } from 'lucide-react';
 
 const DashboardContainer: React.FC = () => {
   const { currentLayout, isLoading, error } = useLayoutStore();
@@ -15,34 +13,47 @@ const DashboardContainer: React.FC = () => {
   }, [loadLayouts]);
 
   if (isLoading && !currentLayout) {
-    return <div className="flex items-center justify-center h-full">Loading Dashboard...</div>;
+    return (
+      <div className="dashboard-loading">
+        <div className="loading-spinner" />
+        <span>Loading Dashboard...</span>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="flex items-center justify-center h-full text-error">{error}</div>;
+    return (
+      <div className="dashboard-error">
+        <span>{error}</span>
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col h-full w-full">
-      <div className="flex items-center justify-between p-2 mb-4 bg-surface rounded shadow border border-border">
-        <div className="flex items-center gap-4">
-          <LayoutSelector />
-          <h2 className="text-lg font-semiboldtext-text">
-            {currentLayout?.title || 'No Layout Selected'}
-          </h2>
-        </div>
-        <div className="flex items-center gap-2">
-          <AddWidgetButton />
-          <ThemeSwitcher />
+    <div className="dashboard-container">
+      {/* Breadcrumb */}
+      <div className="dashboard-breadcrumb">
+        <div className="breadcrumb-left">
+          <h1 className="dashboard-title">
+            {currentLayout?.title || 'Dashboard'}
+          </h1>
+          <div className="breadcrumb-path">
+            <Home size={14} />
+            <ChevronRight size={12} />
+            <span>Dashboards</span>
+            <ChevronRight size={12} />
+            <span className="breadcrumb-current">{currentLayout?.title || 'Select Layout'}</span>
+          </div>
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto bg-background rounded relative">
+      {/* Grid */}
+      <div className="dashboard-grid-area">
         {currentLayout ? (
           <GridLayout />
         ) : (
-          <div className="flex items-center justify-center h-full text-text-muted">
-            Please select a layout
+          <div className="dashboard-empty">
+            Please select a layout from the sidebar
           </div>
         )}
       </div>

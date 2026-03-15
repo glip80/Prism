@@ -44,7 +44,7 @@ const GridLayout: React.FC = () => {
       draggableHandle=".widget-drag-handle"
     >
       {currentLayout.widgets.map((widget) => (
-        <div key={widget.id} className="bg-surface rounded shadow overflow-hidden flex flex-col border border-border">
+        <div key={widget.id}>
           <WidgetRenderer widget={widget} />
         </div>
       ))}
